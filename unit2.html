@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microcontroller Programming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Subtle Harmony -->
+    <!-- Application Structure Plan: A single-page, vertical scroll layout with a sticky top navigation is used for a clear, linear learning path. This structure is ideal for presenting sequential topics in programming. Key interactions include a code-switcher for comparing C and Assembly, a visual flowchart for the development process, and an interactive I/O diagram. This design makes abstract concepts like code syntax and signal flow tangible and easier for beginners to understand. -->
+    <!-- Visualization & Content Choices: 1. Languages: Goal: Compare -> A tabbed interface to toggle between C and Assembly code for a "Blink LED" task provides direct syntax comparison. 2. Dev Tools: Goal: Organize -> An HTML/CSS flowchart illustrates the workflow from code to hardware. 3. Debugging: Goal: Compare -> A side-by-side comparison highlights the differences between simulators and in-circuit debuggers. 4. I/O Interfacing: Goal: Demonstrate -> An interactive diagram with a clickable button visually simulates a digital input causing a digital output, reinforcing the core concept of interfacing. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #27AE60;
+            border-bottom-color: #27AE60;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.08);
+        }
+        .code-block {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #2D3748;
+            color: #F7FAFC;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab-btn.active {
+            background-color: #27AE60;
+            color: #FFFFFF;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27AE60;
+            border-radius: 10px;
+        }
+        .io-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #9CA3AF; /* Off state */
+            border: 2px solid #4B5563;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .io-light.on {
+            background-color: #FBBF24; /* On state */
+            box-shadow: 0 0 10px #FBBF24, 0 0 20px #FBBF24;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-[#27AE60]">Microcontroller Unit-2</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#languages" class="nav-link font-medium border-b-2 border-transparent pb-1">Languages</a>
+                <a href="#tools" class="nav-link font-medium border-b-2 border-transparent pb-1">Tools</a>
+                <a href="#writing" class="nav-link font-medium border-b-2 border-transparent pb-1">Writing</a>
+                <a href="#debugging" class="nav-link font-medium border-b-2 border-transparent pb-1">Debugging</a>
+                <a href="#io" class="nav-link font-medium border-b-2 border-transparent pb-1">I/O Control</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">☰</button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col space-y-2">
+             <a href="index.html" class="nav-link font-medium">Unit-1</a>
+            <a href="#languages" class="nav-link font-medium">Languages</a>
+            <a href="#tools" class="nav-link font-medium">Tools</a>
+            <a href="#writing" class="nav-link font-medium">Writing</a>
+            <a href="#debugging" class="nav-link font-medium">Debugging</a>
+            <a href="#io" class="nav-link font-medium">I/O Control</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <section id="languages" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#27AE60]">1. Embedded Programming Languages</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">To talk to a microcontroller, you need to speak its language. The two most common languages are C and Assembly.</p>
+            
+            <div class="card">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-blue-500 pl-4">
+                        <h3 class="text-xl font-bold mb-2">C Language</h3>
+                        <p><strong>Concept:</strong> A high-level language that is human-readable and powerful. It's the most popular choice for embedded systems because it offers a great balance between ease of use and direct control over hardware.</p>
+                        <p><strong>Analogy:</strong> Writing in C is like giving a chef a recipe in a detailed, well-known cookbook language (like English). The chef understands it, but a "translator" (the compiler) is still needed to convert it into the basic kitchen actions.</p>
+                    </div>
+                    <div class="border-l-4 border-gray-500 pl-4">
+                        <h3 class="text-xl font-bold mb-2">Assembly Language</h3>
+                        <p><strong>Concept:</strong> A low-level language that is very close to the machine code the processor actually understands. Each instruction corresponds to a specific operation of the CPU.</p>
+                        <p><strong>Analogy:</strong> Writing in Assembly is like giving the chef extremely precise, basic instructions: "Move left hand 10cm," "Grasp egg," "Apply 2 newtons of force." It's very tedious and specific to that chef (processor), but it gives you total control.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#27AE60]">2. Development Tools</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">You need a "workshop" on your computer to write, translate, and send your programs to the microcontroller.</p>
+
+            <div class="card mb-8">
+                <h3 class="text-2xl font-semibold mb-4">IDEs and Compilers</h3>
+                <p><strong>Definition:</strong> An <strong>Integrated Development Environment (IDE)</strong> is an all-in-one software suite that acts as your main workspace. It typically includes a text editor, a compiler, and debugging tools. The <strong>Compiler</strong> is the part of the IDE that translates your high-level C code into low-level machine code (1s and 0s) that the microcontroller can execute.</p>
+                <p><strong>Analogy:</strong> The IDE is your entire kitchen. It has a counter to write recipes (text editor), a magical translator that converts your English recipe into the chef's native language (compiler), and tools to test the food (debugger). Popular IDEs include Arduino IDE, MPLAB X, and PlatformIO.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4 text-center">Development Environment Flow</h3>
+                <p class="text-center text-gray-600 mb-6">This is the journey your code takes from your brain to the chip.</p>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                    <div class="p-4 bg-gray-100 rounded-lg w-full md:w-auto"><strong>1. Write Code</strong><br><span class="text-sm">in the IDE</span></div>
+                    <div class="font-bold text-2xl text-gray-400">→</div>
+                    <div class="p-4 bg-green-100 rounded-lg w-full md:w-auto"><strong>2. Compile</strong><br><span class="text-sm">IDE translates code</span></div>
+                    <div class="font-bold text-2xl text-gray-400">→</div>
+                    <div class="p-4 bg-blue-100 rounded-lg w-full md:w-auto"><strong>3. Upload</strong><br><span class="text-sm">Programmer sends it</span></div>
+                    <div class="font-bold text-2xl text-gray-400">→</div>
+                    <div class="p-4 bg-purple-100 rounded-lg w-full md:w-auto"><strong>4. Execute</strong><br><span class="text-sm">MCU runs the code</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="writing" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#27AE60]">3. Writing Microcontroller Programs</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">Let's look at the "Hello, World!" of microcontrollers: blinking an LED. This simple task reveals the basic structure of an embedded program.</p>
+
+             <div class="card">
+                <h3 class="text-2xl font-semibold mb-4">Basic Program Structure (in C)</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <ul class="space-y-4">
+                            <li><strong>1. Includes/Definitions:</strong> At the top, you include libraries and define constants, like which pin the LED is connected to. It's like listing your ingredients and tools before starting a recipe.</li>
+                            <li><strong>2. Setup Function:</strong> A section that runs only ONCE when the microcontroller powers on. Here, you configure things, like setting a pin to be an output. This is the "prep work" in your recipe, like preheating the oven.</li>
+                            <li><strong>3. Main Loop:</strong> An infinite loop that runs over and over again as long as the device is on. This is where the main logic of your program lives. This is the core "cooking instructions" of the recipe that you might repeat.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <pre class="code-block"><code>// 1. Definitions
+#define LED_PIN 13
+
+// 2. Setup Function (runs once)
+void setup() {
+  // Set the LED pin as an output
+  pinMode(LED_PIN, OUTPUT);
+}
+
+// 3. Main Loop (runs forever)
+void loop() {
+  digitalWrite(LED_PIN, HIGH); // Turn LED on
+  delay(1000);                 // Wait 1 second
+  digitalWrite(LED_PIN, LOW);  // Turn LED off
+  delay(1000);                 // Wait 1 second
+}</code></pre>
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-semibold mb-4 mt-8">Code Comparison: C vs. Assembly</h3>
+                <div class="flex justify-center mb-4 border-b border-gray-200">
+                    <button class="tab-btn active py-2 px-4 font-semibold rounded-t-lg" data-lang="c">C Language</button>
+                    <button class="tab-btn py-2 px-4 font-semibold rounded-t-lg" data-lang="asm">Assembly</button>
+                </div>
+                <pre id="code-display" class="code-block"></pre>
+            </div>
+        </section>
+
+        <section id="debugging" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#27AE60]">4. Debugging Microcontroller Programs</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">Your code won't always work perfectly the first time. Debugging is the art of finding and fixing bugs (errors).</p>
+            
+            <div class="card">
+                 <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-yellow-500 pl-4">
+                        <h3 class="text-xl font-bold mb-2">Simulators</h3>
+                        <p><strong>Concept:</strong> A software program on your PC that pretends to be your microcontroller. You can run your code on this "virtual chip" to see how it behaves without needing any physical hardware.</p>
+                        <p><strong>Analogy:</strong> A simulator is like a flight simulator for a pilot. You can practice flying, test maneuvers, and even crash without any real-world consequences. It's safe and great for testing logic.</p>
+                    </div>
+                    <div class="border-l-4 border-red-500 pl-4">
+                        <h3 class="text-xl font-bold mb-2">In-Circuit Debuggers (ICD)</h3>
+                        <p><strong>Concept:</strong> A piece of hardware that connects your PC to the actual microcontroller on your circuit board. It allows you to pause the program while it's running on the real chip, inspect memory, and step through code line by line.</p>
+                        <p><strong>Analogy:</strong> An ICD is like having a co-pilot who can pause time during a real flight. You can stop everything, check the engine status, see the exact fuel level, and then resume time. It's essential for finding problems that only happen with real hardware.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="io" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#27AE60]">5. I/O Interfacing and Control</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">This is how your microcontroller interacts with the real world—by reading sensors and controlling things like lights and motors.</p>
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4">Basic I/O Operations</h3>
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h4 class="font-bold">Digital I/O</h4>
+                        <p>Works with two states: ON or OFF (HIGH or LOW, 5V or 0V). It's a simple yes/no signal.</p>
+                        <p><strong>Analogy:</strong> A standard light switch. It can only be fully on or fully off.</p>
+                    </div>
+                     <div>
+                        <h4 class="font-bold">Analog I/O</h4>
+                        <p>Works with a range of values. An Analog-to-Digital Converter (ADC) can "read" a voltage between 0V and 5V and convert it to a number (e.g., 0-1023).</p>
+                        <p><strong>Analogy:</strong> A dimmer switch for a light. It can be off, full brightness, or anywhere in between.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-semibold mb-4 text-center">Interactive Demo: Digital I/O</h3>
+                <p class="text-center text-gray-600 mb-6">Click the button to simulate a digital input signal. The microcontroller's code will read this input and trigger a digital output, turning on the LED.</p>
+                <div class="p-6 border-2 border-dashed border-gray-300 rounded-lg flex flex-col md:flex-row items-center justify-around space-y-6 md:space-y-0">
+                    <!-- Input Device -->
+                    <div class="text-center">
+                        <p class="font-bold mb-2">INPUT: Switch</p>
+                        <button id="io-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform active:scale-95">Press Me</button>
+                    </div>
+
+                    <!-- MCU Diagram -->
+                    <div class="flex items-center space-x-2">
+                        <div id="io-line-in" class="h-1 w-16 bg-gray-400 transition-colors duration-300"></div>
+                        <div class="p-4 border-2 border-gray-700 bg-gray-800 text-white rounded-lg text-center">
+                            <p class="font-mono text-sm">MCU</p>
+                            <p class="font-bold">PIN 7 (IN) →</p>
+                            <p class="font-bold">PIN 13 (OUT) →</p>
+                        </div>
+                        <div id="io-line-out" class="h-1 w-16 bg-gray-400 transition-colors duration-300"></div>
+                    </div>
+                    
+                    <!-- Output Device -->
+                    <div class="text-center">
+                        <p class="font-bold mb-2">OUTPUT: LED</p>
+                        <div id="io-led" class="io-light mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+            // Active Nav Link on Scroll
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Code Snippet Switcher
+            const codeDisplay = document.getElementById('code-display');
+            const langButtons = document.querySelectorAll('.tab-btn');
+            const codeSnippets = {
+                c: `// C code is more readable
+void loop() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_PIN, LOW);
+  delay(1000);
+}`,
+                asm: `; Assembly is very specific
+LOOP:
+  sbi PORTB, 5   ; Set bit 5 of PORTB (LED ON)
+  rcall DELAY_1S ; Call 1-second delay subroutine
+  cbi PORTB, 5   ; Clear bit 5 of PORTB (LED OFF)
+  rcall DELAY_1S ; Call 1-second delay subroutine
+  rjmp LOOP      ; Jump back to the start of the loop`
+            };
+
+            function updateCodeDisplay(lang) {
+                codeDisplay.textContent = codeSnippets[lang];
+                langButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+            }
+
+            langButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    updateCodeDisplay(button.dataset.lang);
+                });
+            });
+            updateCodeDisplay('c'); // Set initial view
+
+            // Interactive I/O Demo
+            const ioButton = document.getElementById('io-button');
+            const ioLed = document.getElementById('io-led');
+            const lineIn = document.getElementById('io-line-in');
+            const lineOut = document.getElementById('io-line-out');
+
+            ioButton.addEventListener('mousedown', () => {
+                lineIn.style.backgroundColor = '#3B82F6'; // Blue
+                setTimeout(() => {
+                    lineOut.style.backgroundColor = '#FBBF24'; // Yellow
+                    ioLed.classList.add('on');
+                }, 150);
+            });
+
+            ioButton.addEventListener('mouseup', () => {
+                lineIn.style.backgroundColor = '#9CA3AF'; // Gray
+                lineOut.style.backgroundColor = '#9CA3AF'; // Gray
+                ioLed.classList.remove('on');
+            });
+            
+             ioButton.addEventListener('mouseleave', () => { // In case mouse is released outside the button
+                lineIn.style.backgroundColor = '#9CA3AF';
+                lineOut.style.backgroundColor = '#9CA3AF';
+                ioLed.classList.remove('on');
+            });
+        });
+    </script>
+</body>
+</html>
