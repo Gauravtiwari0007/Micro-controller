@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microcontroller Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Subtle Harmony -->
+    <!-- Application Structure Plan: The SPA uses a single-page, vertical scroll layout with a sticky top navigation for easy access to different syllabus topics. This linear structure is ideal for educational content. Key interactive elements include a tabbed interface for comparing microcontroller families and a clickable grid for exploring applications. This design was chosen to break down complex information into digestible, interactive chunks, moving beyond a static document to a more engaging learning tool. -->
+    <!-- Visualization & Content Choices: 1. MCU vs MPU: Goal: Compare -> Side-by-side text blocks with icons for clear visual distinction. 2. Architecture: Goal: Organize -> An HTML/CSS block diagram provides a clear, responsive visual anchor for the text explanations of CPU, Memory, and I/O. 3. Families: Goal: Compare -> Tabbed interface to switch between PIC, AVR, ARM info. A Chart.js Bar Chart visually compares a key metric like market share or complexity, providing a quick data-driven insight. 4. Applications: Goal: Inform -> Interactive grid of cards. Clicking reveals more detail, encouraging user exploration. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D35400;
+            border-bottom-color: #D35400;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.08);
+        }
+        .tab-btn {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab-btn.active {
+            background-color: #D35400;
+            color: #FFFFFF;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D35400;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-[#D35400]">Microcontroller Unit-1</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#introduction" class="nav-link font-medium border-b-2 border-transparent pb-1">Introduction</a>
+                <a href="#architecture" class="nav-link font-medium border-b-2 border-transparent pb-1">Architecture</a>
+                <a href="#families" class="nav-link font-medium border-b-2 border-transparent pb-1">Families</a>
+                <a href="#applications" class="nav-link font-medium border-b-2 border-transparent pb-1">Applications</a>
+                <a href="#tools" class="nav-link font-medium border-b-2 border-transparent pb-1">Tools</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">☰</button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col space-y-2">
+            <a href="#introduction" class="nav-link font-medium">Introduction</a>
+            <a href="#architecture" class="nav-link font-medium">Architecture</a>
+            <a href="#families" class="nav-link font-medium">Families</a>
+            <a href="#applications" class="nav-link font-medium">Applications</a>
+            <a href="#tools" class="nav-link font-medium">Tools</a>
+            <a href="unit2.html" class="nav-link font-medium">Unit-2</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <section id="introduction" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#D35400]">1. Introduction to Microcontrollers</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">Let's start with the basics. What is a microcontroller and why is it so important in modern electronics?</p>
+            
+            <div class="card mb-8">
+                <h3 class="text-2xl font-semibold mb-4">Overview of Microcontrollers</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-bold text-lg">Definition and Significance</h4>
+                        <p>A microcontroller (MCU) is a small, self-contained computer on a single integrated circuit (or "chip"). It contains a processor core, memory, and programmable input/output peripherals. Its significance lies in its ability to be "embedded" inside other devices to control their actions and features, making everyday objects "smart".</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Real-world Analogy: The Smart Appliance Chef</h4>
+                        <p>Think of a microwave oven. You press "Popcorn", and it automatically runs for the right time at the right power. The microcontroller is the tiny chef inside, reading your button press (input), following a pre-programmed recipe (the program in its memory), and controlling the heating element and timer (outputs). It's a dedicated specialist for one set of tasks.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4">Microcontroller vs. Microprocessor</h3>
+                 <p class="mb-6 text-gray-600">This is a classic exam question! The key difference is that a microcontroller is a full system-on-a-chip, while a microprocessor is just the CPU and needs external components to function.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-[#D35400] pl-4">
+                        <h4 class="text-xl font-bold mb-2 flex items-center">
+                            <span class="text-2xl mr-2">🕹️</span> Microcontroller (MCU)
+                        </h4>
+                        <p class="font-semibold">A Swiss Army Knife</p>
+                        <p class="mb-2">Contains a CPU, RAM, ROM, I/O ports, timers, etc., all on one chip. It's designed to be a self-sufficient system for specific tasks.</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Integrated:</strong> All components on a single chip.</li>
+                            <li><strong>Application-Specific:</strong> Built for one job (e.g., controlling a TV remote).</li>
+                            <li><strong>Cost-Effective:</strong> Cheaper because everything is included.</li>
+                            <li><strong>Compact:</strong> Small in size.</li>
+                        </ul>
+                    </div>
+                    <div class="border-l-4 border-gray-400 pl-4">
+                        <h4 class="text-xl font-bold mb-2 flex items-center">
+                            <span class="text-2xl mr-2">🧠</span> Microprocessor (MPU)
+                        </h4>
+                        <p class="font-semibold">The Brain of a Computer</p>
+                        <p class="mb-2">This is only the Central Processing Unit (CPU). It needs external chips for RAM, ROM, and I/O ports to function. It's designed for general-purpose computing.</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Modular:</strong> Requires external components.</li>
+                            <li><strong>General-Purpose:</strong> Can run various programs (e.g., a laptop's processor).</li>
+                            <li><strong>High Power:</strong> Generally much faster and more powerful.</li>
+                            <li><strong>Complex and Expensive:</strong> The whole system is larger and costs more.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#D35400]">2. Microcontroller Architecture</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">Let's look inside. Understanding the core components is key to knowing how a microcontroller works.</p>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4">Basic Architecture and Key Components</h3>
+                 <div class="text-center mb-6">
+                    <h4 class="font-bold text-lg mb-2">Diagram: The Building Blocks of a Microcontroller</h4>
+                    <div class="p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 max-w-2xl mx-auto">
+                        <p class="font-mono font-bold text-lg mb-2">MICROCONTROLLER CHIP</p>
+                        <div class="flex flex-col md:flex-row justify-around items-center space-y-4 md:space-y-0 md:space-x-4">
+                            <div class="w-full md:w-1/3 p-2 bg-orange-100 border border-orange-300 rounded">CPU (The Brain)</div>
+                            <div class="w-full md:w-1/3 p-2 bg-blue-100 border border-blue-300 rounded">MEMORY (RAM & ROM)</div>
+                            <div class="w-full md:w-1/3 p-2 bg-green-100 border border-green-300 rounded">I/O PORTS (Senses & Hands)</div>
+                        </div>
+                        <div class="mt-4 text-gray-500">↑ ↓</div>
+                        <div class="font-mono text-sm">System Bus (The Nervous System)</div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <h4 class="font-bold text-lg text-orange-600">Central Processing Unit (CPU)</h4>
+                        <p><strong>Concept:</strong> The "brain" of the microcontroller. It fetches instructions from memory, decodes them, and executes them to perform tasks.</p>
+                        <p><strong>Analogy:</strong> The CPU is like the chef in our microwave analogy. It reads the recipe (program), understands each step, and carries out the action, like "turn on heater".</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-blue-600">Memory (RAM & ROM)</h4>
+                        <p><strong>Concept:</strong> Where the microcontroller stores information. <strong>ROM (Read-Only Memory)</strong> holds the program instructions (the recipe) that don't change. <strong>RAM (Random-Access Memory)</strong> holds temporary data while the program is running (like calculations or sensor readings).</p>
+                        <p><strong>Analogy:</strong> ROM is the microwave's printed cookbook; the recipes are permanent. RAM is the chef's whiteboard, where they jot down temporary notes like the current cooking time remaining.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-green-600">Input/Output (I/O) Ports</h4>
+                        <p><strong>Concept:</strong> These are the pathways for the microcontroller to interact with the outside world. Input ports receive signals (like a button press), and output ports send signals (like turning on an LED).</p>
+                        <p><strong>Analogy:</strong> The I/O ports are the microwave's senses and hands. The keypad is an input port (sensing your touch), and the light, turntable motor, and display are connected to output ports (its hands and voice).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="families" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#D35400]">3. Microcontroller Families</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">There isn't just one type of microcontroller. Different "families" are suited for different jobs. Here's a comparison of the most common ones.</p>
+            
+            <div class="card">
+                <div class="flex justify-center mb-6 border-b border-gray-200">
+                    <button class="tab-btn active py-2 px-4 font-semibold rounded-t-lg" data-family="pic">PIC</button>
+                    <button class="tab-btn py-2 px-4 font-semibold rounded-t-lg" data-family="avr">AVR</button>
+                    <button class="tab-btn py-2 px-4 font-semibold rounded-t-lg" data-family="arm">ARM</button>
+                </div>
+
+                <div id="family-content" class="min-h-[200px]">
+                </div>
+                
+                <div class="mt-8">
+                     <h3 class="text-2xl font-semibold mb-4 text-center">Feature at a Glance</h3>
+                     <div class="chart-container">
+                        <canvas id="familyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="applications" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#D35400]">4. Applications of Microcontrollers</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">Microcontrollers are everywhere! They are the hidden brains in countless devices. Click on a category to see examples.</p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="app-card card text-center cursor-pointer" data-app="automotive">
+                    <div class="text-4xl mb-4">🚗</div>
+                    <h3 class="text-xl font-bold">Automotive</h3>
+                    <div class="app-details hidden mt-4 text-left">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Engine Control Units (ECU)</li>
+                            <li>Anti-lock Braking Systems (ABS)</li>
+                            <li>Airbag Deployment Systems</li>
+                            <li>Infotainment Systems</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="app-card card text-center cursor-pointer" data-app="consumer">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-bold">Consumer Electronics</h3>
+                     <div class="app-details hidden mt-4 text-left">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>TVs, Remote Controls</li>
+                            <li>Washing Machines, Microwaves</li>
+                            <li>Digital Cameras, Toys</li>
+                            <li>Wearable devices (smartwatches)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="app-card card text-center cursor-pointer" data-app="industrial">
+                    <div class="text-4xl mb-4">🏭</div>
+                    <h3 class="text-xl font-bold">Industrial Control</h3>
+                     <div class="app-details hidden mt-4 text-left">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Robotics and Automation</li>
+                            <li>Process Control (temperature, pressure)</li>
+                            <li>Motor Control Systems</li>
+                            <li>Security and Alarm Systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-2 text-center text-[#D35400]">5. Review and Development Tools</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">To bring your ideas to life, you need the right tools to write and upload your "recipe" to the microcontroller.</p>
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4">Key Concepts Review</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6">
+                    <li>A <strong>Microcontroller</strong> is a complete computer on a chip, designed for specific embedded tasks.</li>
+                    <li>It's different from a <strong>Microprocessor</strong>, which is just the CPU and needs external parts.</li>
+                    <li>The core components are the <strong>CPU</strong> (brain), <strong>Memory</strong> (storage), and <strong>I/O Ports</strong> (senses/hands).</li>
+                    <li>Common families like <strong>PIC, AVR, and ARM</strong> offer different trade-offs in cost, power, and ease of use.</li>
+                </ul>
+                
+                <h3 class="text-2xl font-semibold mb-4">Introduction to Development Tools</h3>
+                 <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-[#D35400] pl-4">
+                        <h4 class="text-xl font-bold mb-2">IDE (Integrated Development Environment)</h4>
+                        <p><strong>Concept:</strong> An all-in-one software application that provides everything you need to write, test, and debug your code. It's like a complete workshop for your project.</p>
+                        <p><strong>Analogy:</strong> An IDE is like a chef's kitchen. It has a text editor (your recipe book), a compiler (an assistant who translates your recipe into the microwave's language), and a debugger (a tool for tasting and fixing the recipe if something is wrong).</p>
+                        <p><strong>Examples:</strong> Arduino IDE, MPLAB X, Atmel Studio.</p>
+                    </div>
+                     <div class="border-l-4 border-gray-400 pl-4">
+                        <h4 class="text-xl font-bold mb-2">Compiler & Programmer</h4>
+                        <p><strong>Concept:</strong> The <strong>Compiler</strong> is a tool (usually part of the IDE) that converts your human-readable code (like C++) into machine code (binary 1s and 0s) that the microcontroller's CPU can understand. The <strong>Programmer</strong> (or uploader) is the hardware device that physically transfers this machine code from your computer to the microcontroller's memory.</p>
+                        <p><strong>Analogy:</strong> The compiler translates your recipe from English into the specific button-press sequence the microwave understands. The programmer is the delivery person who takes this translated sequence and permanently stores it in the microwave's cookbook (its ROM).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            function changeActiveLink() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                const correspondingLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if(correspondingLink) {
+                   correspondingLink.classList.add('active');
+                }
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            changeActiveLink();
+            window.addEventListener('scroll', changeActiveLink);
+
+            const familyData = {
+                pic: {
+                    title: "PIC (Peripheral Interface Controller)",
+                    description: "Developed by Microchip Technology, PIC microcontrollers are popular among hobbyists and in industry for their low cost, wide availability, and ease of use. They are known for their efficient instruction set (RISC architecture).",
+                    points: [
+                        "<strong>Strengths:</strong> Cost-effective, good community support, simple architecture.",
+                        "<strong>Common Applications:</strong> Small-scale automation, hobby projects, simple consumer devices.",
+                        "<strong>Analogy:</strong> Like a reliable, multi-purpose toolkit. It's not the most powerful, but it has the right tool for many common jobs and is easy to learn."
+                    ]
+                },
+                avr: {
+                    title: "AVR (Alf-Egil Bogen and Vegard Wollan's RISC)",
+                    description: "Developed by Atmel (now part of Microchip), AVRs are famous for being the heart of the Arduino boards. They have a powerful instruction set and are optimized for C language execution, making them very popular in the maker community.",
+                     points: [
+                        "<strong>Strengths:</strong> Fast, easy to program in C, strong hobbyist community (Arduino).",
+                        "<strong>Common Applications:</strong> Prototyping, robotics, DIY electronics, educational platforms.",
+                        "<strong>Analogy:</strong> Like a set of high-quality building blocks (like LEGO Technic). They are versatile, powerful, and allow you to build complex things quickly, especially with the Arduino ecosystem providing pre-built modules."
+                    ]
+                },
+                arm: {
+                    title: "ARM (Advanced RISC Machines)",
+                    description: "ARM is different; it's a company that designs processor architectures and licenses them to other manufacturers. ARM-based microcontrollers (like the STM32 series) are very powerful, often 32-bit, and are used in high-performance applications.",
+                     points: [
+                        "<strong>Strengths:</strong> Very powerful (32-bit), energy-efficient, scalable from small MCUs to supercomputers.",
+                        "<strong>Common Applications:</strong> Smartphones, complex automotive systems, IoT devices, high-end consumer electronics.",
+                        "<strong>Analogy:</strong> Like a high-performance engine that can be put into anything from a small car to a race car. It provides the core power, and other manufacturers build the rest of the system around it. It's more complex but far more capable."
+                    ]
+                }
+            };
+            
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const familyContent = document.getElementById('family-content');
+
+            function updateFamilyContent(family) {
+                const data = familyData[family];
+                familyContent.innerHTML = `
+                    <h3 class="text-2xl font-bold mb-2">${data.title}</h3>
+                    <p class="mb-4">${data.description}</p>
+                    <ul class="list-none space-y-2">${data.points.map(p => `<li class="flex items-start"><span class="text-orange-500 mr-2 mt-1">▶</span><span>${p}</span></li>`).join('')}</ul>
+                `;
+                tabButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.family === family);
+                });
+            }
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    updateFamilyContent(button.dataset.family);
+                });
+            });
+
+            const chartData = {
+                labels: ['PIC', 'AVR', 'ARM'],
+                datasets: [{
+                    label: 'Relative Complexity / Performance',
+                    data: [30, 55, 90],
+                    backgroundColor: [
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const ctx = document.getElementById('familyChart').getContext('2d');
+            const familyChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                             grid: { display: false }
+                        },
+                         y: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Complexity vs. Performance Trade-off'
+                        }
+                    },
+                    maintainAspectRatio: false
+                }
+            });
+            
+            updateFamilyContent('pic');
+            
+            const appCards = document.querySelectorAll('.app-card');
+            appCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const details = card.querySelector('.app-details');
+                    details.classList.toggle('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
